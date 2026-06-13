@@ -22,9 +22,9 @@ def init_files():
         with open(TRANSACTIONS_FILE, 'w') as f:
             json.dump({}, f)
 # ---------------------------------
-@app.route("/test")
-def test():
-    return "Flask is working!"
+@app.route("/health")
+def health():
+    return "OK", 200
 # ---------------------------------
 # Hash password
 def hash_password(password):
