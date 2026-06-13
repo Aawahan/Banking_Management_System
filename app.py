@@ -340,6 +340,10 @@ def admin_delete_user(username):
     
     return jsonify({'success': True, 'message': 'User deleted'})
 
+# if __name__ == '__main__':
+#     init_files()
+#     app.run(debug=True)
 if __name__ == '__main__':
     init_files()
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port, debug=False)
