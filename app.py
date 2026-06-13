@@ -21,7 +21,11 @@ def init_files():
     if not os.path.exists(TRANSACTIONS_FILE):
         with open(TRANSACTIONS_FILE, 'w') as f:
             json.dump({}, f)
-
+# ---------------------------------
+@app.route("/test")
+def test():
+    return "Flask is working!"
+# ---------------------------------
 # Hash password
 def hash_password(password):
     return sha256(password.encode()).hexdigest()
