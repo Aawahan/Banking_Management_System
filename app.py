@@ -8,12 +8,6 @@ import secrets
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-
-init_files()
-# File paths
-USERS_FILE = 'users.json'
-TRANSACTIONS_FILE = 'transactions.json'
-
 # Initialize JSON files
 def init_files():
     if not os.path.exists(USERS_FILE):
@@ -22,6 +16,12 @@ def init_files():
     if not os.path.exists(TRANSACTIONS_FILE):
         with open(TRANSACTIONS_FILE, 'w') as f:
             json.dump({}, f)
+
+init_files()
+# File paths
+USERS_FILE = 'users.json'
+TRANSACTIONS_FILE = 'transactions.json'
+
 # ---------------------------------
 @app.route("/health")
 def health():
