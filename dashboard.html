@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking System - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .admin-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .admin-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .balance-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .balance-label {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .balance-amount {
+            font-size: 48px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .operations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 13px;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .transactions-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .transactions-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .transaction-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .transaction-item {
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-type {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .transaction-time {
+            color: #999;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .deposit {
+            color: #28a745;
+        }
+
+        .withdraw {
+            color: #dc3545;
+        }
+
+        .transfer_out {
+            color: #dc3545;
+        }
+
+        .transfer_in {
+            color: #28a745;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-size: 14px;
+        }
+
+        .loader {
+            display: none;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .balance-amount {
+                font-size: 36px;
+            }
+
+            .operations {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .header-actions {
+                width: 100%;
+                gap: 10px;
+            }
+
+            .admin-btn, .logout-btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🏦 Bank Dashboard</h1>
+        <div class="header-actions">
+            <button class="admin-btn" id="adminBtn" style="display: none;">Admin Panel</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="balance-card">
+            <div class="balance-label">Current Balance</div>
+            <div class="balance-amount" id="balance">₹0.00</div>
+        </div>
+
+        <div class="operations">
+            <div class="card">
+                <h2>💰 Deposit</h2>
+                <div id="depositMessage" class="message"></div>
+                <div class="form-group">
+                    <label for="depositAmount">Amount</label>
+                    <input type="number" id="depositAmount" placeholder="Enter amount" min="0.01" step="0.01">
+                </div>
+                <div class="loader" id="depositLoader"></div>
+                <button class="btn" onclick="deposit()">Deposit</button>
+            </div>
+
+            <div class="card">
+                <h2>💸 Withdraw</h2>
+                <div id="withdrawMessage" class="message"></div>
+                <div class="form-group">
+                    <label for="withdrawAmount">Amount</label>
+                    <input type="number" id="withdrawAmount" placeholder="Enter amount" min="0.01" step="0.01">
+                </div>
+                <div class="loader" id="withdrawLoader"></div>
+                <button class="btn" onclick="withdraw()">Withdraw</button>
+            </div>
+
+            <div class="card">
+                <h2>🔄 Transfer</h2>
+                <div id="transferMessage" class="message"></div>
+                <div class="form-group">
+                    <label for="recipient">Recipient</label>
+                    <input type="text" id="recipient" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="transferAmount">Amount</label>
+                    <input type="number" id="transferAmount" placeholder="Enter amount" min="0.01" step="0.01">
+                </div>
+                <div class="loader" id="transferLoader"></div>
+                <button class="btn" onclick="transfer()">Transfer</button>
+            </div>
+        </div>
+
+        <div class="transactions-section">
+            <h2>📊 Recent Transactions</h2>
+            <div class="transaction-list" id="transactionList">
+                <div class="empty-message">No transactions yet</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadBalance() {
+            try {
+                const response = await fetch('/api/balance');
+                const data = await response.json();
+                document.getElementById('balance').textContent = '₹' + data.balance.toFixed(2);
+            } catch (error) {
+                console.error('Error loading balance:', error);
+            }
+        }
+
+        async function loadTransactions() {
+            try {
+                const response = await fetch('/api/transactions');
+                const data = await response.json();
+                const list = document.getElementById('transactionList');
+                
+                if (data.transactions.length === 0) {
+                    list.innerHTML = '<div class="empty-message">No transactions yet</div>';
+                    return;
+                }
+                
+                list.innerHTML = data.transactions.map(t => `
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <div class="transaction-type">${t.description}</div>
+                            <div class="transaction-time">${t.timestamp}</div>
+                        </div>
+                        <div class="transaction-amount ${t.type}">
+                            ${t.type.includes('in') || t.type === 'deposit' ? '+' : '-'}₹${t.amount.toFixed(2)}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading transactions:', error);
+            }
+        }
+
+        async function deposit() {
+            const amount = document.getElementById('depositAmount').value;
+            await performOperation('/api/deposit', amount, 'depositLoader', 'depositMessage', 'depositAmount');
+        }
+
+        async function withdraw() {
+            const amount = document.getElementById('withdrawAmount').value;
+            await performOperation('/api/withdraw', amount, 'withdrawLoader', 'withdrawMessage', 'withdrawAmount');
+        }
+
+        async function transfer() {
+            const recipient = document.getElementById('recipient').value;
+            const amount = document.getElementById('transferAmount').value;
+            
+            if (!recipient) {
+                showMessage('transferMessage', 'Please enter recipient username', 'error');
+                return;
+            }
+            
+            await performOperation('/api/transfer', amount, 'transferLoader', 'transferMessage', 'transferAmount', recipient);
+        }
+
+        async function performOperation(endpoint, amount, loaderId, messageId, inputId, recipient = null) {
+            if (!amount || parseFloat(amount) <= 0) {
+                showMessage(messageId, 'Please enter a valid amount', 'error');
+                return;
+            }
+            
+            const loader = document.getElementById(loaderId);
+            loader.style.display = 'block';
+            
+            try {
+                const body = { amount: parseFloat(amount) };
+                if (recipient) body.recipient = recipient;
+                
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(messageId, data.message, 'success');
+                    document.getElementById(inputId).value = '';
+                    if (recipient !== null) document.getElementById('recipient').value = '';
+                    await loadBalance();
+                    await loadTransactions();
+                } else {
+                    showMessage(messageId, data.message, 'error');
+                }
+            } catch (error) {
+                showMessage(messageId, 'An error occurred', 'error');
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        function showMessage(elementId, text, type) {
+            const el = document.getElementById(elementId);
+            el.textContent = text;
+            el.className = `message ${type}`;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 4000);
+        }
+
+        function logout() {
+            window.location.href = '/logout';
+        }
+
+        function checkAdmin() {
+            fetch('/api/balance').then(r => r.json()).then(data => {
+                // If we reach here, check if admin from session
+                const adminBtn = document.getElementById('adminBtn');
+                // Admin check is implicit - only show if user is admin
+                // This will be shown if accessing /api/admin endpoints succeeds
+            });
+        }
+
+        // Check if admin and show admin button
+        async function checkAdminStatus() {
+            try {
+                const response = await fetch('/api/admin/users');
+                if (response.ok) {
+                    document.getElementById('adminBtn').style.display = 'block';
+                    document.getElementById('adminBtn').onclick = () => window.location.href = '/admin';
+                }
+            } catch (error) {
+                // User is not admin
+            }
+        }
+
+        // Initialize
+        loadBalance();
+        loadTransactions();
+        checkAdminStatus();
+
+        // Refresh every 30 seconds
+        setInterval(() => {
+            loadBalance();
+            loadTransactions();
+        }, 30000);
+    </script>
+</body>
+</html>
