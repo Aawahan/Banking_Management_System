@@ -9,6 +9,7 @@ import secrets
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
+init_files()
 # File paths
 USERS_FILE = 'users.json'
 TRANSACTIONS_FILE = 'transactions.json'
